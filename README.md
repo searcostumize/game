@@ -1,1 +1,1 @@
-(https://gebruikersnaam.github.io/flappy-bird-clone
+game.github.io
