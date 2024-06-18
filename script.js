@@ -1,8 +1,9 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Laad de afbeelding
 const playerImg = new Image();
-playerImg.src = 'player.png';
+playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
 
 const player = {
     x: 50,
@@ -93,6 +94,7 @@ function loop() {
     requestAnimationFrame(loop);
 }
 
+// Beweeg de speler
 document.addEventListener('keydown', (e) => {
     if (e.code === 'ArrowRight') {
         player.dx = player.speed;
@@ -109,4 +111,7 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-loop();
+// Start het spel pas als de afbeelding is geladen
+playerImg.onload = function() {
+    loop();
+};
