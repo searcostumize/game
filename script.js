@@ -1,3 +1,4 @@
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -6,10 +7,10 @@ const playerImg = new Image();
 playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
 
 const player = {
-    x: 150,
+    x: 50,
     y: canvas.height - 60,
     width: 100,
-    height: 70,
+    height: 50,
     speed: 5,
     dx: 0,
     dy: 0,
@@ -49,13 +50,14 @@ const player = {
 
 const platforms = [];
 const platformCount = 5; // Aantal platforms
+const platformGap = 100; // De verticale afstand tussen de platforms
 
 function generateRandomPlatforms() {
     for (let i = 0; i < platformCount; i++) {
         const width = 100;
         const height = 10;
         const x = Math.random() * (canvas.width - width);
-        const y = Math.random() * (canvas.height - height);
+        const y = i * platformGap + 50; // Gebruik een vaste afstand tussen platforms, startend op y=50
         platforms.push({ x, y, width, height });
     }
 }
