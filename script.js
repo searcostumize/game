@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 // Laad de afbeelding
 const playerImg = new Image();
-playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
+playerImg.src = 'Senna.png'; // Zorg ervoor dat het pad correct is
 
 const player = {
     x: 50,
