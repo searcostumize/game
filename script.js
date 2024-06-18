@@ -6,10 +6,10 @@ const playerImg = new Image();
 playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
 
 const player = {
-    x: 100,
+    x: 150,
     y: canvas.height - 60,
     width: 60,
-    height: 60,
+    height: 10,
     speed: 5,
     dx: 0,
     dy: 0,
@@ -47,11 +47,18 @@ const player = {
     }
 };
 
-const platforms = [
-    { x: 100, y: 300, width: 100, height: 10 },
-    { x: 250, y: 250, width: 100, height: 10 },
-    { x: 400, y: 200, width: 100, height: 10 }
-];
+const platforms = [];
+const platformCount = 5; // Aantal platforms
+
+function generateRandomPlatforms() {
+    for (let i = 0; i < platformCount; i++) {
+        const width = 100;
+        const height = 10;
+        const x = Math.random() * (canvas.width - width);
+        const y = Math.random() * (canvas.height - height);
+        platforms.push({ x, y, width, height });
+    }
+}
 
 function drawPlatforms() {
     ctx.fillStyle = 'green';
@@ -113,5 +120,6 @@ document.addEventListener('keyup', (e) => {
 
 // Start het spel pas als de afbeelding is geladen
 playerImg.onload = function() {
+    generateRandomPlatforms();
     loop();
 };
