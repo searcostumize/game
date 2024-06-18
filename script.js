@@ -1,99 +1,109 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const bird = {
+const player = {
     x: 50,
-    y: 150,
-    width: 20,
-    height: 20,
-    gravity: 0.6,
-    lift: -15,
-    velocity: 0,
+    y: canvas.height - 60,
+    width: 30,
+    height: 30,
+    speed: 5,
+    dx: 0,
+    dy: 0,
+    gravity: 0.5,
+    jumpPower: -10,
+    grounded: false,
     draw() {
-        ctx.fillStyle = "#FF0";
+        ctx.fillStyle = 'red';
         ctx.fillRect(this.x, this.y, this.width, this.height);
     },
     update() {
-        this.velocity += this.gravity;
-        this.y += this.velocity;
-        if (this.y > canvas.height - this.height) {
+        this.dy += this.gravity;
+        this.y += this.dy;
+        this.x += this.dx;
+        if (this.y + this.height > canvas.height) {
             this.y = canvas.height - this.height;
-            this.velocity = 0;
+            this.dy = 0;
+            this.grounded = true;
         }
         if (this.y < 0) {
             this.y = 0;
-            this.velocity = 0;
+            this.dy = 0;
+        }
+        if (this.x < 0) {
+            this.x = 0;
+        }
+        if (this.x + this.width > canvas.width) {
+            this.x = canvas.width - this.width;
         }
     },
-    flap() {
-        this.velocity = this.lift;
+    jump() {
+        if (this.grounded) {
+            this.dy = this.jumpPower;
+            this.grounded = false;
+        }
     }
 };
 
-const pipes = [];
-const pipeWidth = 20;
-const pipeGap = 120;
-let frameCount = 0;
+const platforms = [
+    { x: 100, y: 300, width: 100, height: 10 },
+    { x: 250, y: 250, width: 100, height: 10 },
+    { x: 400, y: 200, width: 100, height: 10 }
+];
 
-function drawPipes() {
-    for (let i = 0; i < pipes.length; i++) {
-        ctx.fillStyle = "#0F0";
-        ctx.fillRect(pipes[i].x, 0, pipeWidth, pipes[i].top);
-        ctx.fillRect(pipes[i].x, pipes[i].bottom, pipeWidth, canvas.height - pipes[i].bottom);
-    }
-}
-
-function updatePipes() {
-    if (frameCount % 90 === 0) {
-        const topHeight = Math.random() * (canvas.height - pipeGap);
-        pipes.push({
-            x: canvas.width,
-            top: topHeight,
-            bottom: topHeight + pipeGap
-        });
-    }
-    for (let i = 0; i < pipes.length; i++) {
-        pipes[i].x -= 2;
-        if (pipes[i].x + pipeWidth < 0) {
-            pipes.splice(i, 1);
-            i--;
-        }
-    }
+function drawPlatforms() {
+    ctx.fillStyle = 'green';
+    platforms.forEach(platform => {
+        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+    });
 }
 
 function detectCollision() {
-    for (let i = 0; i < pipes.length; i++) {
-        if (bird.x < pipes[i].x + pipeWidth &&
-            bird.x + bird.width > pipes[i].x &&
-            (bird.y < pipes[i].top || bird.y + bird.height > pipes[i].bottom)) {
-            alert('Game Over');
-            document.location.reload();
+    platforms.forEach(platform => {
+        if (player.x < platform.x + platform.width &&
+            player.x + player.width > platform.x &&
+            player.y < platform.y + platform.height &&
+            player.y + player.height > platform.y) {
+            player.dy = 0;
+            player.y = platform.y - player.height;
+            player.grounded = true;
         }
-    }
+    });
 }
 
-function draw() {
+function clear() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    bird.draw();
-    drawPipes();
 }
 
 function update() {
-    bird.update();
-    updatePipes();
+    player.update();
     detectCollision();
-    frameCount++;
+}
+
+function draw() {
+    clear();
+    player.draw();
+    drawPlatforms();
 }
 
 function loop() {
-    draw();
     update();
+    draw();
     requestAnimationFrame(loop);
 }
 
 document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        bird.flap();
+    if (e.code === 'ArrowRight') {
+        player.dx = player.speed;
+    } else if (e.code === 'ArrowLeft') {
+        player.dx = -player.speed;
+    } else if (e.code === 'Space') {
+        player.jump();
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.code === 'ArrowRight' || e.code === 'ArrowLeft') {
+        player.dx = 0;
     }
 });
 
