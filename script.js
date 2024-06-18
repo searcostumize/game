@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -9,8 +8,8 @@ playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
 const player = {
     x: 50,
     y: canvas.height - 60,
-    width: 100,
-    height: 50,
+    width: 30,
+    height: 30,
     speed: 5,
     dx: 0,
     dy: 0,
@@ -49,16 +48,33 @@ const player = {
 };
 
 const platforms = [];
-const platformCount = 5; // Aantal platforms
-const platformGap = 100; // De verticale afstand tussen de platforms
+const platformCount = 10; // Aantal platforms
+const platformGapMin = 80; // Minimale verticale afstand tussen platforms
+const platformGapMax = 150; // Maximale verticale afstand tussen platforms
+const platformWidth = 100;
+const platformHeight = 10;
+const playerJumpDistance = 150; // Maximaal horizontale sprongafstand van de speler
 
 function generateRandomPlatforms() {
-    for (let i = 0; i < platformCount; i++) {
-        const width = 100;
-        const height = 10;
-        const x = Math.random() * (canvas.width - width);
-        const y = i * platformGap + 50; // Gebruik een vaste afstand tussen platforms, startend op y=50
-        platforms.push({ x, y, width, height });
+    let previousPlatform = { x: 50, y: canvas.height - 60, width: platformWidth, height: platformHeight };
+    platforms.push(previousPlatform);
+
+    for (let i = 1; i < platformCount; i++) {
+        const x = Math.random() * (canvas.width - platformWidth);
+        const y = previousPlatform.y - (platformGapMin + Math.random() * (platformGapMax - platformGapMin));
+        
+        // Zorg ervoor dat het nieuwe platform binnen sprongafstand van het vorige ligt
+        if (Math.abs(x - previousPlatform.x) > playerJumpDistance) {
+            if (x < previousPlatform.x) {
+                x = previousPlatform.x - playerJumpDistance + Math.random() * (canvas.width - (previousPlatform.x - playerJumpDistance));
+            } else {
+                x = previousPlatform.x + Math.random() * (playerJumpDistance - previousPlatform.x);
+            }
+        }
+
+        const platform = { x, y, width: platformWidth, height: platformHeight };
+        platforms.push(platform);
+        previousPlatform = platform;
     }
 }
 
