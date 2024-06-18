@@ -4,9 +4,10 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #70c5ce;
+    background-color: #87ceeb;
 }
 
 canvas {
-    border: 1px solid #fff;
+    border: 1px solid #000;
+    background-color: #87ceeb;
 }
