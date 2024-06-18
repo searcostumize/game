@@ -6,10 +6,10 @@ const playerImg = new Image();
 playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
 
 const player = {
-    x: 50,
+    x: 100,
     y: canvas.height - 60,
-    width: 30,
-    height: 30,
+    width: 60,
+    height: 60,
     speed: 5,
     dx: 0,
     dy: 0,
