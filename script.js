@@ -8,8 +8,8 @@ playerImg.src = 'player.png'; // Zorg ervoor dat het pad correct is
 const player = {
     x: 150,
     y: canvas.height - 60,
-    width: 40,
-    height: 10,
+    width: 100,
+    height: 70,
     speed: 5,
     dx: 0,
     dy: 0,
