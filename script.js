@@ -1,6 +1,9 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+const playerImg = new Image();
+playerImg.src = 'player.png';
+
 const player = {
     x: 50,
     y: canvas.height - 60,
@@ -13,8 +16,7 @@ const player = {
     jumpPower: -10,
     grounded: false,
     draw() {
-        ctx.fillStyle = 'red';
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(playerImg, this.x, this.y, this.width, this.height);
     },
     update() {
         this.dy += this.gravity;
